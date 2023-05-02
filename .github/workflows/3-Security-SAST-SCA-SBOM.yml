@@ -59,16 +59,29 @@ jobs:
           export VERACODE_API_KEY_SECRET=${{ secrets.VERACODE_API_KEY }}
           guid=$(http --auth-type veracode_hmac GET "https://api.veracode.com/appsec/v1/applications?name=PetstoreAPI-Python-GitHub" | jq -r '._embedded.applications[0].guid') 
           echo GUID: ${guid}
+          
+          # Import SAST Flaws
           total_flaws=$(http --auth-type veracode_hmac GET "https://api.veracode.com/appsec/v2/applications/${guid}/findings?scan_type=STATIC&violates_policy=True" | jq -r '.page.total_elements')
           echo TOTAL_FLAWS: ${total_flaws}
           http --auth-type veracode_hmac GET "https://api.veracode.com/appsec/v2/applications/${guid}/findings?scan_type=STATIC&violates_policy=True&size=${total_flaws}" > policy_flaws.json
           
+          # DAST Vulns
+          TOTAL_DAST=$(http --auth-type veracode_hmac GET "https://api.veracode.com/appsec/v2/applications/${guid}/findings?scan_type=DYNAMIC&violates_policy=True" | jq -r '.page.total_elements')
+          echo TOTAL_DAST: ${total_vulns}
+          http --auth-type veracode_hmac GET "https://api.veracode.com/appsec/v2/applications/${guid}/findings?scan_type=DYNAMIC&violates_policy=True&size=${total_vulns}" > dast_vulns.json
+               
       - name: Synch SAST Security Issues to GitHub Issues
         uses: veracode/veracode-flaws-to-issues@v1
         with:
           scan-results-json: '/tmp/policy_flaws.json'
           github-token: ${{ secrets.GH_TOKEN }}     
 
+      - name: Synch DAST Security Issues to GitHub Issues
+        uses: veracode/veracode-flaws-to-issues@v1
+        with:
+          scan-results-json: '/tmp/dast_vulns.json'
+          github-token: ${{ secrets.GH_TOKEN }}     
+          
   Container-Inspection-SBOM:
     runs-on: ubuntu-latest
     steps:
