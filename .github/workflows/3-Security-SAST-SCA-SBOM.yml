@@ -118,7 +118,7 @@ jobs:
           update_advisor: true
           create-issues: true
           # A path within the repository where the build definition starts
-          path: app
+          path: ./
           # Run the SRCCLR with the `--allow-dirty` option
           allow-dirty: true 
           
