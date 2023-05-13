@@ -26,7 +26,7 @@ jobs:
         run: |
          ls -la
          
-# Use the UploadAndScan action to submit the artifact for scanning
+# Use the UploadAndScan action to submit the artifact for scanning for Policy
       - name: Veracode Upload and Scan Action Step
         uses: veracode/veracode-uploadandscan-action@master
         id: upload_and_scan
@@ -40,3 +40,21 @@ jobs:
           vkey: '${{ secrets.VERACODE_API_KEY }}'
           teams: 'ClintPollock-DemoApps2023'
         continue-on-error: true
+
+# Use the UploadAndScan action to submit the artifact for scanning for SandBox
+      - name: Veracode Upload and Scan Action Step
+        uses: veracode/veracode-uploadandscan-action@master
+        id: upload_and_scan
+        with:
+          appname: 'PetstoreAPI-Python-GitHub'
+          createprofile: false
+          createsandbox: true
+          sandboxname: DailyBuild
+          version: '${{ github.run_id }}'
+          criticality: High
+          filepath: 'petstore-api-python.zip'
+          vid: '${{ secrets.VERACODE_API_ID }}'
+          vkey: '${{ secrets.VERACODE_API_KEY }}'
+          teams: 'ClintPollock-DemoApps2023'
+        continue-on-error: true
+              
