@@ -35,5 +35,5 @@ jobs:
           filepath: 'petstore-api-python.zip'
           vid: '${{ secrets.VERACODE_API_ID }}'
           vkey: '${{ secrets.VERACODE_API_KEY }}'
-          teams: 'DemoApps2023'
+          teams: 'ClintPollock-DemoApps2023'
         continue-on-error: true
