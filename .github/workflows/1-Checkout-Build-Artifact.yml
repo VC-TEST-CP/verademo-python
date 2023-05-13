@@ -74,7 +74,9 @@ jobs:
     container: 
       image: veracode/api-signing:latest
     steps:            
-
+# Checkout
+      - uses: actions/checkout@v2
+      
 # Update the DAST Scan Name to be uniuqe using SED command         
       - name: Update DAST config file with uniuqe scan name
         run: |
