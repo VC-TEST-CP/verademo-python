@@ -93,4 +93,4 @@ jobs:
          pip install veracode-api-signing
          export VERACODE_API_KEY_ID=${{ secrets.VERACODE_API_ID }}
          export VERACODE_API_KEY_SECRET=${{ secrets.VERACODE_API_KEY }}
-         http --auth-type=veracode_hmac POST "https://api.veracode.com/was/configservice/v1/analyses?job_options=run_verification=false&scan_type=API_SCAN" < vc-dast-config.json
+         http --headers --auth-type=veracode_hmac POST "https://api.veracode.com/was/configservice/v1/analyses?job_options=run_verification=false&scan_type=API_SCAN" < vc-dast-config.json
