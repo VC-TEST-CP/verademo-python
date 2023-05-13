@@ -78,6 +78,7 @@ jobs:
 # Update the DAST Scan Name to be uniuqe using SED command         
       - name: Update DAST config file with uniuqe scan name
         run: |
+         cp vc-dast-config.json /tmp/
          cd /tmp
          NOW=$(date +"%m-%d-%Y-%T")
          sed -i 's/Petstore_API_Python_Github/Petstore_API_Python_Github-'${NOW}'/g' vc-dast-config.json
