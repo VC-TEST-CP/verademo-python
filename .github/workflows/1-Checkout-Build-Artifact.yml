@@ -17,7 +17,7 @@ jobs:
       - uses: actions/checkout@v2
 
 # Handy during testing to check the file you expect is actually there 
-      - name: Confirm artifact exists on drive
+      - name: Create application artifact
         run: |
          zip petstore-api-python.zip api.py requirements.txt
 
@@ -29,7 +29,7 @@ jobs:
 # Use the UploadAndScan action to submit the artifact for scanning for Policy
       - name: Veracode Upload and Scan Action Step
         uses: veracode/veracode-uploadandscan-action@master
-        id: upload_and_scan
+        id: upload_and_scan_policy
         with:
           appname: 'PetstoreAPI-Python-GitHub'
           createprofile: true
@@ -44,7 +44,7 @@ jobs:
 # Use the UploadAndScan action to submit the artifact for scanning for SandBox
       - name: Veracode Upload and Scan Action Step
         uses: veracode/veracode-uploadandscan-action@master
-        id: upload_and_scan
+        id: upload_and_scan_sandbox
         with:
           appname: 'PetstoreAPI-Python-GitHub'
           createprofile: false
