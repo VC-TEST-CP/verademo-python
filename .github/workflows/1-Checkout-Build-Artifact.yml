@@ -80,7 +80,7 @@ jobs:
         run: |
          NOW=$(date +"%m-%d-%Y-%T")
          sed -i 's/Petstore_API_Python_Github/Petstore_API_Python_Github-'${NOW}'/g' vc-dast-config.json
-         sed -i 's/petstore-api-python-github.qa/servicenow-petstore-api-python-github.qa'/g' vc-dast-config.json
+         sed -i 's/petstore-api-python-github.qa/servicenow-petstore-api-python-github.qa/g' vc-dast-config.json
 
 # Visual confirmation of the scan submission details
       - name: Display DAST config file with uniuqe scan name
