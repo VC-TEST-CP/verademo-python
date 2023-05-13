@@ -31,7 +31,7 @@ jobs:
           appname: 'PetstoreAPI-Python-GitHub'
           createprofile: true
           version: '${{ github.run_id }}'
-          criticality: Medium
+          criticality: High
           filepath: 'petstore-api-python.zip'
           vid: '${{ secrets.VERACODE_API_ID }}'
           vkey: '${{ secrets.VERACODE_API_KEY }}'
