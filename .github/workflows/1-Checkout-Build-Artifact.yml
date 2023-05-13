@@ -27,7 +27,7 @@ jobs:
          ls -la
          
 # Use the UploadAndScan action to submit the artifact for scanning for Policy
-      - name: Veracode Upload and Scan Action Step
+      - name: Veracode Upload and Scan Action Step - Policy
         uses: veracode/veracode-uploadandscan-action@master
         id: upload_and_scan_policy
         with:
@@ -42,7 +42,7 @@ jobs:
         continue-on-error: true
 
 # Use the UploadAndScan action to submit the artifact for scanning for SandBox
-      - name: Veracode Upload and Scan Action Step
+      - name: Veracode Upload and Scan Action Step - Sandbox
         uses: veracode/veracode-uploadandscan-action@master
         id: upload_and_scan_sandbox
         with:
