@@ -67,4 +67,29 @@ jobs:
         env: 
           SRCCLR_API_TOKEN: ${{ secrets.SRCCLR_API_TOKEN }}
         run: curl -sSL https://download.sourceclear.com/ci.sh | sh -s scan --image veracodedemolabs/petstore_api_python_github:latest
-                
+ 
+ # Workflow to run DAST Scan against QA server.  We use the veracode/api-signing image for this.
+  Submit-DAST-Scan:
+    runs-on: ubuntu-latest
+    container: 
+      image: veracode/api-signing:latest
+    steps:            
+
+# Update the DAST Scan Name to be uniuqe using SED command         
+      - name: Update DAST config file with uniuqe scan name
+        run: |
+         cd /tmp
+         NOW=$(date +"%m-%d-%Y-%T")
+         sed -i 's/Petstore_API_Python_Github/Petstore_API_Python_Github-'${NOW}'/g' vc-dast-config.json
+
+# Visual confirmation of the scan submission details
+      - name: Display DAST config file with uniuqe scan name
+        run: |
+          cat /tmp/vc-dast-config.json
+ 
+# DAST scan submission using the DAST API 
+      - name: Submit Veracode DAST Scan
+        run: |
+         export VERACODE_API_KEY_ID=${{ secrets.VERACODE_API_ID }}
+         export VERACODE_API_KEY_SECRET=${{ secrets.VERACODE_API_KEY }}
+         http --auth-type=veracode_hmac POST "https://api.veracode.com/was/configservice/v1/analyses?job_options=run_verification=false&scan_type=API_SCAN"
