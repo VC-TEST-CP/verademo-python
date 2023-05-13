@@ -22,7 +22,12 @@ jobs:
         with:
           name: petstore-api-python
           path: ./**         
-     
+
+# Handy during testing to check the file you expect is actually there 
+      - name: Confirm artifact exists on drive
+        run: |
+         ls -la
+         
 # Use the UploadAndScan action to submit the artifact for scanning
       - name: Veracode Upload and Scan Action Step
         uses: veracode/veracode-uploadandscan-action@master
