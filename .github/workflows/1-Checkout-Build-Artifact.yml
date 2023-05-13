@@ -15,13 +15,11 @@ jobs:
 
 # Checkout
       - uses: actions/checkout@v2
-            
-# Create application artifact
-      - name: Upload a Build Artifact
-        uses: actions/upload-artifact@v3.1.0
-        with:
-          name: petstore-api-python
-          path: ./**         
+
+# Handy during testing to check the file you expect is actually there 
+      - name: Confirm artifact exists on drive
+        run: |
+         7zip a -tzip petstore-api-python api.py requirements.txt
 
 # Handy during testing to check the file you expect is actually there 
       - name: Confirm artifact exists on drive
