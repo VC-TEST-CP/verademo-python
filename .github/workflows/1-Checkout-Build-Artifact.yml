@@ -86,11 +86,12 @@ jobs:
       - name: Display DAST config file with uniuqe scan name
         run: |
           cat vc-dast-config.json
- 
+           
 # DAST scan submission using the DAST API 
       - name: Submit Veracode DAST Scan
         run: |
          pip install veracode-api-signing
          export VERACODE_API_KEY_ID=${{ secrets.VERACODE_API_ID }}
          export VERACODE_API_KEY_SECRET=${{ secrets.VERACODE_API_KEY }}
+         http --verbose --auth-type=veracode_hmac GET "https://api.veracode.com/was/configservice/v1/api_specifications"
          http --verbose --auth-type=veracode_hmac POST "https://api.veracode.com/was/configservice/v1/analyses?job_options=run_verification=false&scan_type=API_SCAN" < vc-dast-config.json
