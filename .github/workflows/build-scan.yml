@@ -123,7 +123,7 @@ jobs:
           export VERACODE_API_KEY_ID=${{ secrets.VERACODE_API_ID }}
           export VERACODE_API_KEY_SECRET=${{ secrets.VERACODE_API_KEY }}
           ./veracode scan --source ./app --type directory --format table -o IssuesSource.txt
-          ./veracode sbom --sourece veracodedemolabs/petstore_api_python_github:latest --type image --format table -o SBOM.txt
+          ./veracode sbom --source veracodedemolabs/petstore_api_python_github:latest --type image --format table -o SBOM.txt
           ls -la
     # Store security artifacts
       - name: Upload security artifacts
