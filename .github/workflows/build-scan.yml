@@ -14,7 +14,7 @@ jobs:
     steps:
 
 # Checkout
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
 # In the case of Python we simply ZIP the files into an artifact
       - name: Create application artifact
@@ -71,7 +71,7 @@ jobs:
   SCA-Agent-Scan:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: SCA Agent Repo Scan
         env: 
@@ -88,7 +88,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:            
 # Checkout
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       
 # Update the DAST Scan Name to be unique using SED command         
       - name: Update DAST config file with unique scan name
@@ -115,7 +115,7 @@ jobs:
   Container-Inspection-SBOM:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Veracode CLI
         run: |
           mkdir tmp
