@@ -110,3 +110,24 @@ jobs:
          export VERACODE_API_KEY_SECRET=${{ secrets.VERACODE_API_KEY }}
          http --verbose --auth-type=veracode_hmac GET "https://api.veracode.com/was/configservice/v1/api_specifications"
          http --verbose --auth-type=veracode_hmac POST "https://api.veracode.com/was/configservice/v1/analyses?job_options=run_verification=false&scan_type=API_SCAN" < vc-dast-config.json
+#--------------------------------------------------------------------------
+# Use Veracode CLI to inspect app and container
+  Container-Inspection-SBOM:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Veracode Container Scanner
+        run: |
+          mkdir tmp
+          cd tmp
+          curl -fsS https://tools.veracode.com/veracode-cli/install | sh
+          export VERACODE_API_KEY_ID=${{ secrets.VERACODE_API_ID }}
+          export VERACODE_API_KEY_SECRET=${{ secrets.VERACODE_API_KEY }}
+          ls -la
+          ./veracode scan app --source --type directory --format table -o IssuesSource.txt
+          ./veracode sbom --source /veracodedemolabs/petstore_api_python_github:latest --type image --format table -o SBOM.txt
+    # Store security artifacts
+      - name: Upload security artifacts
+        uses: actions/upload-artifact@v3.1.0
+        with:
+          name: SecurityArtifacts
+          path: ./tmp/*.txt
