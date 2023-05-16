@@ -26,6 +26,9 @@ jobs:
         run: |
          ls -la
 
+      - name: Download Veracode Wrapper
+        run: curl -O https://repo1.maven.org/maven2/com/veracode/vosp/api/wrappers/vosp-api-wrappers-java/22.5.10.0/vosp-api-wrappers-java-22.5.10.0.jar
+
 # Use the UploadAndScan action to submit the artifact for scanning for Policy      
       - name: Submit Policy scan
         env: 
