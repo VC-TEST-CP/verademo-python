@@ -122,7 +122,7 @@ jobs:
           curl -fsS https://tools.veracode.com/veracode-cli/install | sh
           export VERACODE_API_KEY_ID=${{ secrets.VERACODE_API_ID }}
           export VERACODE_API_KEY_SECRET=${{ secrets.VERACODE_API_KEY }}
-          ./veracode scan --source ./app --type directory --format table -o IssuesSource.txt
+          ./veracode scan --source https://github.com/VC-TEST-433556/verademo-servicenow-python --type repo --format table -o IssuesSource.txt
           ./veracode sbom --source veracodedemolabs/petstore_api_python_github:latest --type image --format table -o SBOM.txt
           ls -la
     # Store security artifacts
