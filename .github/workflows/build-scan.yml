@@ -1,4 +1,4 @@
-name: 1-Checkout-Build-Artifact
+name: Build and Scan with Veracode
 
 # This workflow will checkout the code, ZIP the Python file, and create an artifact for use in following workflows.
 on:
@@ -16,7 +16,7 @@ jobs:
 # Checkout
       - uses: actions/checkout@v2
 
-# Handy during testing to check the file you expect is actually there 
+# In the case of Python we simply ZIP the files into an artifact
       - name: Create application artifact
         run: |
          zip petstore-api-python.zip api.py requirements.txt
@@ -25,38 +25,50 @@ jobs:
       - name: Confirm artifact exists on drive
         run: |
          ls -la
-         
-# Use the UploadAndScan action to submit the artifact for scanning for Policy
-      - name: Veracode Upload and Scan Action Step - Policy
-        uses: veracode/veracode-uploadandscan-action@master
-        id: upload_and_scan_policy
-        with:
-          appname: 'PetstoreAPI-Python-GitHub'
-          createprofile: true
-          version: '${{ github.run_id }}'
-          criticality: High
-          filepath: 'petstore-api-python.zip'
-          vid: '${{ secrets.VERACODE_API_ID }}'
-          vkey: '${{ secrets.VERACODE_API_KEY }}'
-          teams: 'ClintPollock-DemoApps2023'
+
+# Use the UploadAndScan action to submit the artifact for scanning for Policy      
+      - name: Submit Policy scan
+        env: 
+          vid: ${{ secrets.VERACODE_API_ID }}
+          vkey: ${{ secrets.VERACODE_API_KEY }}
+        run: >
+         java -jar vosp-api-wrappers-java-22.5.10.0.jar 
+         -vid $vid
+         -vkey $vkey 
+         -appname PetStoreAPI-Github
+         -action UploadAndScan
+         -createprofile true
+         -criticality Medium
+         -version ${{ github.run_id }}
+         -teams ClintPollock-DemoApps2023 
+         -filepath petstore-api-python.zip
         continue-on-error: true
 
-# Use the UploadAndScan action to submit the artifact for scanning for SandBox
-      - name: Veracode Upload and Scan Action Step - Sandbox
-        uses: veracode/veracode-uploadandscan-action@master
-        id: upload_and_scan_sandbox
-        with:
-          appname: 'PetstoreAPI-Python-GitHub'
-          createprofile: false
-          createsandbox: true
-          sandboxname: DailyBuild
-          version: '${{ github.run_id }}'
-          criticality: High
-          filepath: 'petstore-api-python.zip'
-          vid: '${{ secrets.VERACODE_API_ID }}'
-          vkey: '${{ secrets.VERACODE_API_KEY }}'
-          teams: 'ClintPollock-DemoApps2023'
+# Use the UploadAndScan action to submit the artifact for scanning for Sandbox     
+      - name: Submit Sandbox scan
+        env: 
+          vid: ${{ secrets.VERACODE_API_ID }}
+          vkey: ${{ secrets.VERACODE_API_KEY }}
+        run: >
+         java -jar vosp-api-wrappers-java-22.5.10.0.jar 
+         -vid $vid
+         -vkey $vkey 
+         -appname PetStoreAPI-Github
+         -action UploadAndScan
+         -createprofile false
+         -createsandbox true
+         -sandboxname DailyBuild
+         -criticality Medium
+         -version ${{ github.run_id }}
+         -teams ClintPollock-DemoApps2023 
+         -filepath petstore-api-python.zip
         continue-on-error: true
+
+# Use SCA Agent to scan repo and container
+  SCA-Agent-Scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
 
       - name: SCA Agent Repo Scan
         env: 
@@ -75,8 +87,8 @@ jobs:
 # Checkout
       - uses: actions/checkout@v2
       
-# Update the DAST Scan Name to be uniuqe using SED command         
-      - name: Update DAST config file with uniuqe scan name
+# Update the DAST Scan Name to be unique using SED command         
+      - name: Update DAST config file with unique scan name
         run: |
          NOW=$(date +"%m-%d-%Y-%T")
          sed -i 's/Petstore_API_Python_Github/Petstore_API_Python_Github-'${NOW}'/g' vc-dast-config.json
