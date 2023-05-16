@@ -116,7 +116,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Veracode Container Scanner
+      - name: Veracode CLI
         run: |
           mkdir tmp
           cd tmp
