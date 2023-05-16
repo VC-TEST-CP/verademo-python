@@ -98,7 +98,7 @@ jobs:
          sed -i 's/petstore-api-python-github.qa/servicenow-petstore-api-python-github.qa/g' vc-dast-config.json
 
 # Visual confirmation of the scan submission details
-      - name: Display DAST config file with uniuqe scan name
+      - name: Display DAST config file with unique scan name
         run: |
           cat vc-dast-config.json
            
